@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Network Engineer Toolkit — VLSM, IPv6, planification, topologie, configs Cisco, simulation." />
+  <title>Network Engineer Toolkit</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <a href="#content-area" class="skip-link">Aller au contenu</a>
+
+  <div class="app-shell">
+    <aside id="sidebar" class="app-sidebar" aria-label="Navigation principale">
+      <div class="sidebar-brand">
+        <h1>Network Engineer Toolkit</h1>
+        <p class="sub">Outils réseau — portfolio CCNA</p>
+      </div>
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item is-active" data-view="dashboard">Tableau de bord</button>
+        <button type="button" class="nav-item" data-view="ip-calc">Calcul IP</button>
+        <button type="button" class="nav-item" data-view="planning">Planification</button>
+        <button type="button" class="nav-item" data-view="topology">Topologie</button>
+        <button type="button" class="nav-item" data-view="config">Configuration Cisco</button>
+        <button type="button" class="nav-item" data-view="simulation">Simulation</button>
+        <button type="button" class="nav-item" data-view="history">Historique</button>
+        <button type="button" class="nav-item" data-view="learn">Pédagogie</button>
+      </nav>
+      <button type="button" id="btn-sidebar-close" class="nav-item sidebar-close-btn" aria-label="Fermer le menu">Fermer le menu</button>
+    </aside>
+
+    <div id="sidebar-overlay" class="sidebar-overlay" hidden aria-hidden="true"></div>
+
+    <div class="app-main">
+      <header class="topbar">
+        <button type="button" id="btn-sidebar-open" class="btn-icon" aria-label="Ouvrir le menu">☰</button>
+        <h2 id="view-heading" class="view-title">Tableau de bord</h2>
+        <button type="button" id="btn-theme" class="btn btn-ghost" aria-label="Mode sombre">
+          <span class="icon-sun" aria-hidden="true">☀</span>
+          <span class="icon-moon" aria-hidden="true">☾</span>
+        </button>
+      </header>
+
+      <div id="content-area" class="content-area">
+        <!-- Dashboard -->
+        <section id="view-dashboard" class="view-panel" data-view="dashboard">
+          <p class="card-desc" style="margin-top:0">Suite d’outils pour ingénieurs et étudiants réseau — tout s’exécute dans le navigateur.</p>
+
+          <div class="card launch-card">
+            <h2 class="card-title">Ouvrir sans chercher le fichier</h2>
+            <p class="card-desc">
+              Raccourcis pour lancer le site dans votre navigateur par défaut (une fois le dossier du projet ouvert dans Cursor / VS Code).
+            </p>
+            <ul class="launch-list">
+              <li>
+                <strong>Cursor / VS Code :</strong> <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd> lance la tâche de build par défaut → ouvre <code>index.html</code>.
+                <div class="launch-btns">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-copy-vscode-task" data-copy-vscode>Copier le nom de la tâche</button>
+                </div>
+              </li>
+              <li>
+                <strong>Terminal (Linux / macOS) :</strong> depuis le dossier du projet, exécutez le script ci-dessous.
+                <div class="launch-btns">
+                  <button type="button" class="btn btn-primary btn-sm" id="btn-copy-sh-cmd" data-copy-sh>Copier la commande <code>bash</code></button>
+                </div>
+              </li>
+              <li>
+                <strong>Windows :</strong> double-cliquez sur <code>open-netkit.bat</code> dans l’explorateur de fichiers.
+                <div class="launch-btns">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-copy-bat-hint" data-copy-bat>Copier le nom du fichier .bat</button>
+                </div>
+              </li>
+              <li>
+                <strong>Menu des tâches :</strong> <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → tapez <em>Tasks: Run Task</em> → <strong>Ouvrir Network Engineer Toolkit</strong>.
+              </li>
+            </ul>
+            <p id="launch-feedback" class="launch-feedback" role="status" aria-live="polite" hidden></p>
+          </div>
+
+          <div class="dashboard-grid">
+            <button type="button" class="dash-card" data-goto="ip-calc">
+              <span class="dash-icon" aria-hidden="true">▣</span>
+              <h3>Calcul IP</h3>
+              <p>VLSM IPv4, sous-réseaux /64, conversions binaire et CIDR.</p>
+            </button>
+            <button type="button" class="dash-card" data-goto="planning">
+              <span class="dash-icon" aria-hidden="true">⬡</span>
+              <h3>Planification</h3>
+              <p>Multi-sites, couches core / distribution / accès, allocation IP.</p>
+            </button>
+            <button type="button" class="dash-card" data-goto="topology">
+              <span class="dash-icon" aria-hidden="true">◎</span>
+              <h3>Topologie</h3>
+              <p>Schéma SVG dynamique, équipements et liaisons.</p>
+            </button>
+            <button type="button" class="dash-card" data-goto="config">
+              <span class="dash-icon" aria-hidden="true">⌘</span>
+              <h3>Config Cisco</h3>
+              <p>VLAN, ACL, DHCP, routes statiques.</p>
+            </button>
+            <button type="button" class="dash-card" data-goto="simulation">
+              <span class="dash-icon" aria-hidden="true">◉</span>
+              <h3>Simulation</h3>
+              <p>Ping logique animé sur un même sous-réseau.</p>
+            </button>
+            <button type="button" class="dash-card" data-goto="history">
+              <span class="dash-icon" aria-hidden="true">☰</span>
+              <h3>Historique</h3>
+              <p>Journal des actions (stockage local).</p>
+            </button>
+          </div>
+        </section>
+
+        <!-- Calcul IP -->
+        <section id="view-ip-calc" class="view-panel" data-view="ip-calc" hidden>
+          <div class="subtabs" role="tablist">
+            <button type="button" class="subtab-ip is-active" data-subpanel="vlsm">IPv4 — VLSM</button>
+            <button type="button" class="subtab-ip" data-subpanel="ipv6">IPv6 — /64</button>
+            <button type="button" class="subtab-ip" data-subpanel="convert">Conversions</button>
+          </div>
+
+          <div data-subpanel-ip="vlsm">
+            <div class="card">
+              <h2 class="card-title">VLSM (IPv4)</h2>
+              <p class="card-desc">Tri automatique du plus grand au plus petit ; +2 adresses (réseau + broadcast) par LAN.</p>
+              <form id="form-vlsm" class="form-vlsm" novalidate>
+                <div class="field-row">
+                  <label for="base-ip">Adresse de départ</label>
+                  <input type="text" id="base-ip" placeholder="192.168.0.0" autocomplete="off" required />
+                </div>
+                <div class="field-row">
+                  <label for="num-lans">Nombre de LAN</label>
+                  <input type="number" id="num-lans" min="1" max="64" value="3" required />
+                  <button type="button" id="btn-generate-lans" class="btn btn-secondary">Générer les champs hôtes</button>
+                </div>
+                <fieldset class="hosts-fieldset">
+                  <legend>Hôtes par LAN</legend>
+                  <div id="hosts-container" class="hosts-container"></div>
+                </fieldset>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Calculer</button>
+                </div>
+              </form>
+              <div id="vlsm-error" class="alert alert-error" role="alert" hidden></div>
+            </div>
+            <details class="card details-learn">
+              <summary>Explication VLSM (pédagogie)</summary>
+              <div id="vlsm-steps" class="steps-content"></div>
+            </details>
+            <div id="vlsm-results-wrap" class="results-wrap" hidden>
+              <div class="results-toolbar">
+                <h3 class="results-title">Résultats</h3>
+                <div class="toolbar-btns">
+                  <button type="button" id="btn-copy-vlsm" class="btn btn-secondary btn-sm">Copier</button>
+                  <button type="button" id="btn-export-vlsm" class="btn btn-secondary btn-sm">Export .txt</button>
+                  <button type="button" id="btn-pdf-vlsm" class="btn btn-secondary btn-sm">PDF</button>
+                </div>
+              </div>
+              <div class="table-scroll">
+                <table class="data-table" id="vlsm-table">
+                  <thead>
+                    <tr>
+                      <th>LAN</th>
+                      <th>Hôtes</th>
+                      <th>Réseau</th>
+                      <th>CIDR</th>
+                      <th>Masque</th>
+                      <th>Broadcast</th>
+                      <th>1ʳᵉ util.</th>
+                      <th>Dernière</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="vlsm-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div data-subpanel-ip="ipv6" hidden>
+            <div class="card">
+              <h2 class="card-title">Sous-réseaux IPv6 /64</h2>
+              <form id="form-ipv6" novalidate>
+                <div class="field-row">
+                  <label for="ipv6-prefix">Préfixe</label>
+                  <input type="text" id="ipv6-prefix" placeholder="2001:db8::/48" autocomplete="off" required />
+                </div>
+                <div class="field-row">
+                  <label for="ipv6-count">Nombre de /64</label>
+                  <input type="number" id="ipv6-count" min="1" max="65536" value="4" required />
+                </div>
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Générer</button>
+                </div>
+              </form>
+              <div id="ipv6-error" class="alert alert-error" role="alert" hidden></div>
+            </div>
+            <div id="ipv6-results-wrap" class="results-wrap" hidden>
+              <div class="results-toolbar">
+                <h3 class="results-title">Sous-réseaux</h3>
+                <div class="toolbar-btns">
+                  <button type="button" id="btn-copy-ipv6" class="btn btn-secondary btn-sm">Copier</button>
+                  <button type="button" id="btn-export-ipv6" class="btn btn-secondary btn-sm">Export</button>
+                  <button type="button" id="btn-pdf-ipv6" class="btn btn-secondary btn-sm">PDF</button>
+                </div>
+              </div>
+              <div class="table-scroll">
+                <table class="data-table" id="ipv6-table">
+                  <thead><tr><th>#</th><th>Préfixe /64</th></tr></thead>
+                  <tbody id="ipv6-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div data-subpanel-ip="convert" hidden>
+            <div class="card">
+              <h2 class="card-title">Conversions IP</h2>
+              <p class="card-desc">Binaire, masque ↔ CIDR, informations sur une adresse/CIDR.</p>
+              <div class="field-row">
+                <label for="convert-mode">Mode</label>
+                <select id="convert-mode" class="field-select">
+                  <option value="ip-binary">IPv4 → binaire</option>
+                  <option value="cidr-info">Adresse / CIDR → détail réseau</option>
+                  <option value="mask-cidr">Masque décimal → CIDR</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <label for="convert-input">Valeur</label>
+                <input type="text" id="convert-input" placeholder="ex. 192.168.1.1 ou 192.168.1.0/24 ou 255.255.255.0" autocomplete="off" />
+              </div>
+              <button type="button" id="btn-convert-run" class="btn btn-primary">Convertir</button>
+              <div id="convert-error" class="alert alert-error" role="alert" hidden></div>
+              <div id="convert-output" style="margin-top:1rem"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Planification -->
+        <section id="view-planning" class="view-panel" data-view="planning" hidden>
+          <div class="card">
+            <h2 class="card-title">Plan multi-sites (hiérarchique)</h2>
+            <p class="card-desc">
+              Chaque site reçoit une base dérivée en incrémentant le <strong>2ᵉ octet</strong> (ex. 10.0.0.0 → site 2 : 10.1.0.0).
+              Par site : une couche <strong>Core</strong>, une <strong>Distribution</strong>, puis <em>N</em> VLAN d’accès avec le même nombre d’hôtes.
+            </p>
+            <form id="form-planning" novalidate>
+              <div class="field-row">
+                <label for="plan-sites">Nombre de sites</label>
+                <input type="number" id="plan-sites" min="1" max="255" value="2" required />
+              </div>
+              <div class="field-row">
+                <label for="plan-base">IPv4 de base (site 1)</label>
+                <input type="text" id="plan-base" value="10.0.0.0" autocomplete="off" required />
+              </div>
+              <div class="field-row">
+                <label for="plan-hosts-core">Hôtes — Core</label>
+                <input type="number" id="plan-hosts-core" min="1" value="60" required />
+              </div>
+              <div class="field-row">
+                <label for="plan-hosts-dist">Hôtes — Distribution</label>
+                <input type="number" id="plan-hosts-dist" min="1" value="40" required />
+              </div>
+              <div class="field-row">
+                <label for="plan-access-vlans">Nombre de VLAN d’accès</label>
+                <input type="number" id="plan-access-vlans" min="1" max="32" value="3" required />
+              </div>
+              <div class="field-row">
+                <label for="plan-hosts-access">Hôtes par VLAN d’accès</label>
+                <input type="number" id="plan-hosts-access" min="1" value="30" required />
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Générer le plan</button>
+              </div>
+            </form>
+            <div id="planning-error" class="alert alert-error" role="alert" hidden></div>
+          </div>
+          <div id="planning-results-wrap" class="results-wrap" hidden>
+            <div class="results-toolbar">
+              <h3 class="results-title">Tableau d’allocation</h3>
+              <div class="toolbar-btns">
+                <button type="button" id="btn-copy-planning" class="btn btn-secondary btn-sm">Copier</button>
+                <button type="button" id="btn-export-planning" class="btn btn-secondary btn-sm">Export</button>
+                <button type="button" id="btn-pdf-planning" class="btn btn-secondary btn-sm">PDF</button>
+              </div>
+            </div>
+            <div class="table-scroll">
+              <table class="data-table" id="planning-table">
+                <thead>
+                  <tr>
+                    <th>Site</th>
+                    <th>Couche</th>
+                    <th>Hôtes</th>
+                    <th>Réseau</th>
+                    <th>Masque</th>
+                    <th>1ʳᵉ util.</th>
+                    <th>Dernière</th>
+                  </tr>
+                </thead>
+                <tbody id="planning-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Topologie -->
+        <section id="view-topology" class="view-panel" data-view="topology" hidden>
+          <div class="card">
+            <h2 class="card-title">Diagramme réseau (SVG)</h2>
+            <p class="card-desc">Schéma 3-tiers ou ajout manuel d’équipements reliés automatiquement en chaîne.</p>
+            <div class="topology-toolbar">
+              <button type="button" id="btn-topo-3tier" class="btn btn-primary">Générer 3-tiers</button>
+              <button type="button" id="btn-topo-clear" class="btn btn-secondary">Effacer</button>
+              <button type="button" id="btn-topo-auto-link" class="btn btn-secondary">Relier en chaîne</button>
+              <input type="text" id="topo-device-name" placeholder="Nom équipement" class="field-inline" style="max-width:140px;padding:0.5rem" />
+              <select id="topo-device-type" class="field-select" style="max-width:160px">
+                <option value="router">Routeur</option>
+                <option value="switch">Switch</option>
+                <option value="firewall">Firewall</option>
+                <option value="core">Core</option>
+                <option value="distribution">Distribution</option>
+                <option value="access">Accès</option>
+              </select>
+              <button type="button" id="btn-topo-add-custom" class="btn btn-secondary">Ajouter</button>
+            </div>
+            <div class="topology-wrap">
+              <svg id="topology-svg" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" aria-label="Topologie">
+                <g id="topology-links"></g>
+                <g id="topology-nodes"></g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- Config Cisco -->
+        <section id="view-config" class="view-panel" data-view="config" hidden>
+          <p class="card-desc">Génération de snippets <strong>Cisco IOS</strong> (syntaxe indicative — à adapter à votre version).</p>
+          <div class="config-grid">
+            <div class="card">
+              <h3 class="card-title">VLAN</h3>
+              <form id="form-config-vlan" novalidate>
+                <div class="field-row">
+                  <label for="cfg-vlan-id">ID VLAN</label>
+                  <input type="number" id="cfg-vlan-id" min="1" max="4094" value="10" required />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-vlan-name">Nom</label>
+                  <input type="text" id="cfg-vlan-name" placeholder="DATA" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-vlan-ifs">Interface (access)</label>
+                  <input type="text" id="cfg-vlan-ifs" placeholder="GigabitEthernet0/1" />
+                </div>
+                <button type="submit" class="btn btn-primary">Générer</button>
+              </form>
+            </div>
+            <div class="card">
+              <h3 class="card-title">ACL étendue</h3>
+              <form id="form-config-acl" novalidate>
+                <div class="field-row">
+                  <label for="cfg-acl-num">Numéro (100–199)</label>
+                  <input type="number" id="cfg-acl-num" min="100" max="199" value="100" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-acl-action">Action</label>
+                  <select id="cfg-acl-action">
+                    <option value="permit">permit</option>
+                    <option value="deny">deny</option>
+                  </select>
+                </div>
+                <div class="field-row">
+                  <label for="cfg-acl-proto">Protocole</label>
+                  <select id="cfg-acl-proto">
+                    <option value="ip">ip</option>
+                    <option value="tcp">tcp</option>
+                    <option value="udp">udp</option>
+                    <option value="icmp">icmp</option>
+                  </select>
+                </div>
+                <div class="field-row">
+                  <label for="cfg-acl-src">Source</label>
+                  <input type="text" id="cfg-acl-src" placeholder="any" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-acl-dst">Destination</label>
+                  <input type="text" id="cfg-acl-dst" placeholder="any" />
+                </div>
+                <button type="submit" class="btn btn-primary">Générer</button>
+              </form>
+            </div>
+            <div class="card">
+              <h3 class="card-title">DHCP</h3>
+              <form id="form-config-dhcp" novalidate>
+                <div class="field-row">
+                  <label for="cfg-dhcp-pool">Nom du pool</label>
+                  <input type="text" id="cfg-dhcp-pool" value="LAN_USERS" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-dhcp-network">Réseau</label>
+                  <input type="text" id="cfg-dhcp-network" placeholder="192.168.1.0" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-dhcp-mask">Masque</label>
+                  <input type="text" id="cfg-dhcp-mask" placeholder="255.255.255.0" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-dhcp-gw">Passerelle</label>
+                  <input type="text" id="cfg-dhcp-gw" placeholder="192.168.1.1" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-dhcp-dns">DNS</label>
+                  <input type="text" id="cfg-dhcp-dns" placeholder="8.8.8.8" />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-dhcp-excl">Plage exclue</label>
+                  <input type="text" id="cfg-dhcp-excl" placeholder="192.168.1.1 192.168.1.10" />
+                </div>
+                <button type="submit" class="btn btn-primary">Générer</button>
+              </form>
+            </div>
+            <div class="card">
+              <h3 class="card-title">Route statique</h3>
+              <form id="form-config-route" novalidate>
+                <div class="field-row">
+                  <label for="cfg-route-dest">Réseau destination</label>
+                  <input type="text" id="cfg-route-dest" placeholder="10.0.0.0" required />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-route-mask">Masque</label>
+                  <input type="text" id="cfg-route-mask" placeholder="255.0.0.0" required />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-route-next">Next-hop</label>
+                  <input type="text" id="cfg-route-next" placeholder="192.168.1.2" required />
+                </div>
+                <div class="field-row">
+                  <label for="cfg-route-ad">Distance admin.</label>
+                  <input type="number" id="cfg-route-ad" min="1" max="255" value="1" />
+                </div>
+                <button type="submit" class="btn btn-primary">Générer</button>
+              </form>
+            </div>
+          </div>
+          <div class="card">
+            <div class="results-toolbar">
+              <h3 class="results-title">Sortie CLI</h3>
+              <div class="toolbar-btns">
+                <button type="button" id="btn-copy-config" class="btn btn-secondary btn-sm">Copier</button>
+                <button type="button" id="btn-export-config" class="btn btn-secondary btn-sm">Export</button>
+                <button type="button" id="btn-pdf-config" class="btn btn-secondary btn-sm">PDF</button>
+              </div>
+            </div>
+            <pre id="config-output" hidden></pre>
+          </div>
+        </section>
+
+        <!-- Simulation -->
+        <section id="view-simulation" class="view-panel" data-view="simulation" hidden>
+          <div class="card">
+            <h2 class="card-title">Simulation « ping » locale</h2>
+            <p class="card-desc">Vérifie si deux hôtes partagent le même sous-réseau (CIDR) puis anime une requête/réponse simplifiée.</p>
+            <div class="sim-wrap">
+              <div>
+                <div class="field-row">
+                  <label for="sim-ip-a">Hôte A</label>
+                  <input type="text" id="sim-ip-a" value="192.168.1.10" autocomplete="off" />
+                </div>
+                <div class="field-row">
+                  <label for="sim-ip-b">Hôte B</label>
+                  <input type="text" id="sim-ip-b" value="192.168.1.50" autocomplete="off" />
+                </div>
+                <div class="field-row">
+                  <label for="sim-cidr">CIDR du sous-réseau</label>
+                  <input type="number" id="sim-cidr" min="8" max="30" value="24" />
+                </div>
+                <button type="button" id="btn-sim-ping" class="btn btn-primary">Lancer</button>
+              </div>
+              <div>
+                <canvas id="sim-canvas" width="420" height="220" aria-label="Animation simulation"></canvas>
+                <pre id="sim-log" class="muted" style="margin-top:0.75rem;font-size:0.85rem;white-space:pre-wrap"></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Historique -->
+        <section id="view-history" class="view-panel" data-view="history" hidden>
+          <div class="card">
+            <h2 class="card-title">Historique des projets / actions</h2>
+            <p class="card-desc">Données enregistrées dans le navigateur (localStorage).</p>
+            <div class="history-actions">
+              <button type="button" id="btn-clear-history-global" class="btn btn-secondary">Vider</button>
+            </div>
+            <ul id="history-list-global" class="history-list"></ul>
+            <p id="history-empty-global" class="muted">Aucune entrée.</p>
+          </div>
+        </section>
+
+        <!-- Pédagogie -->
+        <section id="view-learn" class="view-panel" data-view="learn" hidden>
+          <div class="learn-box">
+            <h3>VLSM</h3>
+            <ul>
+              <li>Regrouper les besoins en adresses (hôtes + réseau + broadcast).</li>
+              <li>Trier les segments du <strong>plus grand au plus petit</strong>.</li>
+              <li>Allouer depuis une adresse de départ en respectant les frontières de puissances de 2.</li>
+            </ul>
+          </div>
+          <div class="learn-box">
+            <h3>IPv6</h3>
+            <ul>
+              <li>Les LAN utilisateurs sont souvent en <strong>/64</strong>.</li>
+              <li>Depuis un préfixe d’agrégation (/48, /52…), on incrémente le sous-préfixe pour chaque LAN.</li>
+            </ul>
+          </div>
+          <div class="learn-box">
+            <h3>Hiérarchie campus</h3>
+            <ul>
+              <li><strong>Core</strong> : haut débit, faible latence, agrégation.</li>
+              <li><strong>Distribution</strong> : politiques, routage inter-VLAN.</li>
+              <li><strong>Accès</strong> : connexion des postes et téléphones.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <footer class="site-footer">
+        <p><strong>Network Engineer Toolkit</strong> — HTML, CSS, JavaScript · Portfolio / CCNA</p>
+        <p class="credit">Développé par <strong>LANDJIDE Sedami Urbain</strong></p>
+      </footer>
+    </div>
+  </div>
+
+  <div id="print-area" class="print-area" aria-hidden="true"></div>
+
+  <!-- Ordre de chargement : utilitaires → shell → modules -->
+  <script src="js/utils/ip-math.js"></script>
+  <script src="js/core/netkit-core.js"></script>
+  <script src="js/modules/ip-module.js"></script>
+  <script src="js/modules/planning-module.js"></script>
+  <script src="js/modules/topology-module.js"></script>
+  <script src="js/modules/config-module.js"></script>
+  <script src="js/modules/simulation-module.js"></script>
+  <script src="js/modules/history-panel.js"></script>
+  <script src="js/modules/launcher-hints.js"></script>
+</body>
+</html>
