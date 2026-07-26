@@ -135,7 +135,7 @@ Ce projet peut être utilisé pour :
 
 ## 👨‍💻 Auteur
 
-Projet réalisé par [Ton Nom]
+Projet réalisé par LANDJIDE Urbain Sedami
 
 ---
 
